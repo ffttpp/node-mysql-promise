@@ -1,6 +1,6 @@
 {
   "name": "node-mysql-promise",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "node mysql model based on promise",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,9 @@
   },
   "keywords": [
     "node-mysql",
-    "promise"
+    "promise",
+    "mysql-pool",
+    "parse-sql"
   ],
   "author": "ffttpp",
   "license": "MIT",
