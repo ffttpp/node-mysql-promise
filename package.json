@@ -1,0 +1,27 @@
+{
+  "name": "node-mysql-promise",
+  "version": "0.0.3",
+  "description": "node mysql model based on promise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ffttpp/node-mysql-promise.git"
+  },
+  "keywords": [
+    "node-mysql",
+    "promise"
+  ],
+  "author": "ffttpp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ffttpp/node-mysql-promise/issues"
+  },
+  "homepage": "https://github.com/ffttpp/node-mysql-promise",
+  "dependencies": {
+    "es6-promise": "^2.0.1",
+    "mysql": "^2.5.4"
+  }
+}
