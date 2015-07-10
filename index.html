@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Node-mysql-promise by ffttpp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Node-mysql-promise</h1>
+      <h2 class="project-tagline">node mysql model based on promise</h2>
+      <a href="https://github.com/ffttpp/node-mysql-promise" class="btn">View on GitHub</a>
+      <a href="https://github.com/ffttpp/node-mysql-promise/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/ffttpp/node-mysql-promise/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="node-mysql-promise" class="anchor" href="#node-mysql-promise" aria-hidden="true"><span class="octicon octicon-link"></span></a>node-mysql-promise</h1>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<pre><code>$ npm install node-mysql-promise
+</code></pre>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>node mysql操作封装类，基于promise，借鉴75team开源项目thinkjs中model操作，数据库连接使用node-mysql的连接池。</p>
+
+<h3>
+<a id="使用示例" class="anchor" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用示例</h3>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> Mysql <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>node-mysql-promise<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> mysql <span class="pl-k">=</span> Mysql.createConnection({
+    host        <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>localhost<span class="pl-pds">'</span></span>,
+    user        <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>username<span class="pl-pds">'</span></span>,
+    password    <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span>
+});
+<span class="pl-c">//SELECT * FROM table;</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>().then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(data);
+}).catch(<span class="pl-k">function</span> (<span class="pl-smi">e</span>) {
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(e);
+});</pre></div>
+
+<h2>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
+
+<h3>
+<a id="配置" class="anchor" href="#%E9%85%8D%E7%BD%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>配置</h3>
+
+<ul>
+<li>
+<code>host</code>: 连接的host（默认: localhost）</li>
+<li>
+<code>port</code>: 连接端口</li>
+<li>
+<code>user</code>: 用户名</li>
+<li>
+<code>password</code>: 密码</li>
+<li>
+<code>database</code>: 数据库名</li>
+<li>
+<code>charset</code>: 编码（默认: UTF8_GENERAL_CI）</li>
+<li>
+<code>timezone</code>: 时区（默认: 'local'）</li>
+<li>
+<code>connectTimeout</code>: 连接超时时间（默认: 10000）</li>
+<li>
+<code>connectionLimit</code>: 最大连接数（默认: 10）</li>
+<li>
+<code>logSql</code>: 控制台输出sql（默认: false）</li>
+</ul>
+
+<h3>
+<a id="方法" class="anchor" href="#%E6%96%B9%E6%B3%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>方法</h3>
+
+<h5>
+<a id="tabletablename" class="anchor" href="#tabletablename" aria-hidden="true"><span class="octicon octicon-link"></span></a>table(tableName)</h5>
+
+<p>设置要查询的表（必需）</p>
+
+<ul>
+<li>
+<code>tableName</code> String 要查询的表</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table`</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>()</pre></div>
+
+<h4>
+<a id="fieldfield-reverse" class="anchor" href="#fieldfield-reverse" aria-hidden="true"><span class="octicon octicon-link"></span></a>field(field, reverse)</h4>
+
+<p>设置要查询的字段</p>
+
+<ul>
+<li>
+<code>field</code> String|Array 要查询的字段，可以是字符串，也可以是数组</li>
+<li>
+<code>reverse</code> Boolean 是否反选字段</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table`</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).field().<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT `id`, `title` FROM `table`</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).field(<span class="pl-s"><span class="pl-pds">'</span>id, title<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT `id`, `title` FROM `table`</span>
+mysql.table([<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>]).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT `author`, `date` FROM `table`</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).field([<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>], <span class="pl-c1">true</span>).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="limitoffset-length" class="anchor" href="#limitoffset-length" aria-hidden="true"><span class="octicon octicon-link"></span></a>limit(offset, length)</h4>
+
+<p>设置查询的数量</p>
+
+<ul>
+<li>
+<code>offset</code> Number 起始位置</li>
+<li>
+<code>length</code> Number 查询的数目</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` LIMIT 10</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).limit(<span class="pl-c1">10</span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` LIMIT 10, 20</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).limit(<span class="pl-c1">10</span>, <span class="pl-c1">20</span>).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="pagepage-listrows" class="anchor" href="#pagepage-listrows" aria-hidden="true"><span class="octicon octicon-link"></span></a>page(page, listRows)</h4>
+
+<p>设置当前查询的页数，页数从1开始</p>
+
+<ul>
+<li>
+<code>page</code> Number 当前的页数</li>
+<li>
+<code>listRows</code> Number 一页记录条数，默认20条</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table`</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).page().<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` LIMIT 0,20</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).page(<span class="pl-c1">1</span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` LIMIT 10, 20</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).page(<span class="pl-c1">2</span>, <span class="pl-c1">10</span>).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="unionunion-all" class="anchor" href="#unionunion-all" aria-hidden="true"><span class="octicon octicon-link"></span></a>union(union, all)</h4>
+
+<p>联合查询</p>
+
+<ul>
+<li>
+<code>union</code> String 联合查询的字符串</li>
+<li>
+<code>all</code> 是否为UNION ALL模式</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` UNION (SELECT * FROM `table2`)</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).union(<span class="pl-s"><span class="pl-pds">'</span>SELECT * FROM `table2`<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` UNION ALL (SELECT * FROM `table2`)</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).union(<span class="pl-s"><span class="pl-pds">'</span>SELECT * FROM `table2`<span class="pl-pds">'</span></span>, <span class="pl-c1">true</span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` UNION ALL (SELECT * FROM `table2`)</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).union({table<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>table2<span class="pl-pds">'</span></span>}, <span class="pl-c1">true</span>);
+<span class="pl-c">//SELECT * FROM `table` UNION ALL (SELECT * FROM `table2`) UNION (SELECT * FROM `table3`)</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).UNION({table<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>table2`}, true).union({table: <span class="pl-pds">'</span></span>table3<span class="pl-s"><span class="pl-pds">'</span>});</span></pre></div>
+
+<h4>
+<a id="joinjoin" class="anchor" href="#joinjoin" aria-hidden="true"><span class="octicon octicon-link"></span></a>join(join)</h4>
+
+<p>组合查询</p>
+
+<ul>
+<li>
+<code>join</code> String|Array|Object</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` LEFT JOIN `table2` ON table.id = table2.id</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">join</span>(<span class="pl-s"><span class="pl-pds">'</span>table2 on table.id = table2.id<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` LEFT JOIN `table2` ON table.id = table2.id RIGHT JOIN `table3` ON table.sid = table3.sid</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">join</span>(<span class="pl-s"><span class="pl-pds">'</span>table2 ON table.id = table2.id<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>RIGHT JOIN table3 ON table.sid = table3.sid<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` INNER JOIN `table2` on table.id = table2.id</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">join</span>({
+    table<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>table2<span class="pl-pds">'</span></span>,
+    join<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>inner<span class="pl-pds">'</span></span>,<span class="pl-c">//left, right, inner三种方式</span>
+    as<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>c<span class="pl-pds">'</span></span> <span class="pl-c">//表别名</span>
+    on<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>] <span class="pl-c">//ON 条件</span>
+}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` AS a LEFT JOIN `table2` AS b ON a.id = b.id LEFT JOIN `table3` AS c ON a.sid = c.sid</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).alias(<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>).<span class="pl-c1">join</span>({
+    table<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>table2<span class="pl-pds">'</span></span>,
+    join<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>left<span class="pl-pds">'</span></span>,
+    as<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>
+    on<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>]
+}).<span class="pl-c1">join</span>({
+    table<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>table3<span class="pl-pds">'</span></span>,
+    join<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>left<span class="pl-pds">'</span></span>,
+    as<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>c<span class="pl-pds">'</span></span>,
+    on<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>sid<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>sid<span class="pl-pds">'</span></span>]
+}).<span class="pl-c1">select</span>();        
+<span class="pl-c">//SELECT * FROM `table` AS a LEFT JOIN `table2` AS b ON a.id = b.id LEFT JOIN `table3` AS c ON a.sid = c.sid</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">join</span>({
+    table2<span class="pl-k">:</span> {
+        join<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>left<span class="pl-pds">'</span></span>,
+        as<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>,
+        on<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>]
+    },
+    table3<span class="pl-k">:</span> {
+        join<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>left<span class="pl-pds">'</span></span>,
+        as<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>c<span class="pl-pds">'</span></span>,
+        on<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>sid<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>sid<span class="pl-pds">'</span></span>]
+    }
+}).<span class="pl-c1">select</span>();        
+<span class="pl-c">//SELECT * FROM `table` LEFT JOIN `table2` ON table.id = table2.id LEFT JOIN `table3` ON (table.sid = table3.sid AND table.name = table3.title);</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">join</span>({
+    table2<span class="pl-k">:</span> {
+        on<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>]
+    },
+    table3<span class="pl-k">:</span> {
+        on<span class="pl-k">:</span> {
+            id<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>,
+            title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>
+        }
+    }
+}).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="orderorder" class="anchor" href="#orderorder" aria-hidden="true"><span class="octicon octicon-link"></span></a>order(order)</h4>
+
+<p>设置排序方式</p>
+
+<ul>
+<li>
+<code>order</code>  String|Array|Obeject 排序方式</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` ORDER BY `id`</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).order(<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();      
+<span class="pl-c">//SELECT * FROM `table` ORDER BY `id` DESC</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).order(<span class="pl-s"><span class="pl-pds">'</span>id DESC<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` ORDER BY `id` DESC, `title` ASC</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).order(<span class="pl-s"><span class="pl-pds">'</span>id DESC, title ASC<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` ORDER BY `id` DESC, `title` ASC</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).order([<span class="pl-s"><span class="pl-pds">'</span>id DESC<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>title ASC<span class="pl-pds">'</span></span>]).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` ORDER BY `id` DESC `title` ASC</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).order({id<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>DESC<span class="pl-pds">'</span></span>, title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>ASC<span class="pl-pds">'</span></span>}).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="aliasalias" class="anchor" href="#aliasalias" aria-hidden="true"><span class="octicon octicon-link"></span></a>alias(alias)</h4>
+
+<p>设置表别名</p>
+
+<ul>
+<li>
+<code>alias</code> String 表别名</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` AS t</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).alias(<span class="pl-s"><span class="pl-pds">'</span>t<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="havingstr" class="anchor" href="#havingstr" aria-hidden="true"><span class="octicon octicon-link"></span></a>having(str)</h4>
+
+<p>having查询</p>
+
+<ul>
+<li>
+<code>str</code> String having查询的字符串</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` HAVING `id` &gt; 1 AND `id` &lt; 100</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).having(<span class="pl-s"><span class="pl-pds">'</span>id &gt; 1 AND id &lt; 100<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="groupfield" class="anchor" href="#groupfield" aria-hidden="true"><span class="octicon octicon-link"></span></a>group(field)</h4>
+
+<p>分组查询</p>
+
+<ul>
+<li>
+<code>field</code> String 设定分组查询的字段</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` GROUP BY `date`</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).group(<span class="pl-s"><span class="pl-pds">'</span>date<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="distinctfield" class="anchor" href="#distinctfield" aria-hidden="true"><span class="octicon octicon-link"></span></a>distinct(field)</h4>
+
+<p>去重查询</p>
+
+<ul>
+<li>
+<code>field</code> String 去重的字段</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT DISTINCT `title` FROM `table`</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).distinct(<span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="wherewhere" class="anchor" href="#wherewhere" aria-hidden="true"><span class="octicon octicon-link"></span></a>where(where)</h4>
+
+<p>设置where条件</p>
+
+<ul>
+<li>
+<code>where</code> Sting|Object 查询条件</li>
+<li>
+<code>return</code> this</li>
+</ul>
+
+<h5>
+<a id="普通条件" class="anchor" href="#%E6%99%AE%E9%80%9A%E6%9D%A1%E4%BB%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>普通条件</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` WHERE `id` = 100;</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where(<span class="pl-s"><span class="pl-pds">'</span>id = 100<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE `id` = 100;</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> <span class="pl-c1">100</span>}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE `id` = 100 OR `id` &lt; 2</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where(<span class="pl-s"><span class="pl-pds">'</span>id = 100 OR id &lt; 2<span class="pl-pds">'</span></span>).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE `id` != 100</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>!=<span class="pl-pds">'</span></span>, <span class="pl-c1">100</span>]})</pre></div>
+
+<h5>
+<a id="exp条件" class="anchor" href="#exp%E6%9D%A1%E4%BB%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>EXP条件</h5>
+
+<p>默认会对字段和值进行转义，如果不希望被转义，可是使用EXP的方式</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` WHERE `name` = 'name'</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({name<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>EXP<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">"</span>='name'<span class="pl-pds">"</span></span>]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//UPDATE `table` SET `num' = `num`+1</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).update({num<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>EXP<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>num+1<span class="pl-pds">'</span></span>]});</pre></div>
+
+<h5>
+<a id="like条件" class="anchor" href="#like%E6%9D%A1%E4%BB%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>LIKE条件</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` WHERE (`title` NOT LIKE 'title')</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({title<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>NOT LIKE<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE (`title` LIKE '%title%')</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({title<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>LIKE<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>%title%<span class="pl-pds">'</span></span>]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//LIKE多个值</span>
+<span class="pl-c">//SELECT * FROM `table` WHERE (`title` LIKE 'title' OR `title` LIKE 'name')</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({title<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>LIKE<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>]]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//多个字段LIKE同一个值，OR的关系</span>
+<span class="pl-c">//SELECT * FROM `table` WHERE ((`title` LIKE '%title%') OR (`content` LIKE '%title%'))</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({<span class="pl-s"><span class="pl-pds">'</span>title|content<span class="pl-pds">'</span></span><span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>LIKE<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>%title%<span class="pl-pds">'</span></span>]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//多个字段LIKE同一个值，AND的关系</span>
+<span class="pl-c">//SELECT * FROM `table` WHERE ((`title` LIKE '%title%') AND (`content` LIKE '%title%'))</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({<span class="pl-s"><span class="pl-pds">'</span>title&amp;content<span class="pl-pds">'</span></span><span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>LIKE<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>%title%<span class="pl-pds">'</span></span>]}).<span class="pl-c1">select</span>();</pre></div>
+
+<h5>
+<a id="in条件" class="anchor" href="#in%E6%9D%A1%E4%BB%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>IN条件</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` WHERE (`id` IN (1,2,3))</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>IN<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>1, 2, 3<span class="pl-pds">'</span></span>]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE (`id` IN (1, 2, 3))</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>IN<span class="pl-pds">'</span></span>, [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE (`id` NOT IN (1, 2, 3))</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>NOT IN<span class="pl-pds">'</span></span>, [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]]}).<span class="pl-c1">select</span>();</pre></div>
+
+<h5>
+<a id="多字段查询" class="anchor" href="#%E5%A4%9A%E5%AD%97%E6%AE%B5%E6%9F%A5%E8%AF%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>多字段查询</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` WHERE (`id` = 10) AND (`title` = 'title')</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> <span class="pl-c1">10</span>, title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>}).<span class="pl-c1">select</span>();
+<span class="pl-c">//OR</span>
+<span class="pl-c">//SELECT * FROM `table` WHERE (`id` = 10) OR (`title` = 'title')</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> <span class="pl-c1">10</span>, title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>, _logic<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>OR<span class="pl-pds">'</span></span>}).<span class="pl-c1">select</span>();
+<span class="pl-c">//XOR</span>
+<span class="pl-c">//SELECT * FROM `table` WHERE (`id` = 10) XOR (`title` = 'title')</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> <span class="pl-c1">10</span>, title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>, _logic<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>XOR<span class="pl-pds">'</span></span>}).<span class="pl-c1">select</span>();</pre></div>
+
+<h5>
+<a id="between" class="anchor" href="#between" aria-hidden="true"><span class="octicon octicon-link"></span></a>BETWEEN</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` WHERE (`id` BETWEEN 1 AND 2)</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>BETWEEN<span class="pl-pds">'</span></span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE (`id` BETWEEN 1 AND 2)</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>BETWEEN<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>1,2<span class="pl-pds">'</span></span>]}).<span class="pl-c1">select</span>();</pre></div>
+
+<h5>
+<a id="复合查询" class="anchor" href="#%E5%A4%8D%E5%90%88%E6%9F%A5%E8%AF%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>复合查询</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT * FROM `table` WHERE `id` &gt; 10 AND `id` &lt; 20</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">'</span>&gt;<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">10</span>,
+    <span class="pl-s"><span class="pl-pds">'</span>&lt;<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">20</span>
+}}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE `id` &lt; 10 OR `id` &gt; 20</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">'</span>&lt;<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">10</span>,
+    <span class="pl-s"><span class="pl-pds">'</span>&gt;<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">20</span>,
+    _logic<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>OR<span class="pl-pds">'</span></span>
+}}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE (`id` &gt; 10 AND `id` &lt; 20) OR (`title` LIKE '%title%')</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">'</span>&gt;<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">10</span>,
+    <span class="pl-s"><span class="pl-pds">'</span>&lt;<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">20</span>
+}, title<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>LIKE<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>%title%<span class="pl-pds">'</span></span>]}).<span class="pl-c1">select</span>();
+<span class="pl-c">//SELECT * FROM `table` WHERE (`title` = 'title') AND ((`id` IN (1, 2, 3)) OR (`content` = 'content'))</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({
+    title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>,
+    _complex<span class="pl-k">:</span> {
+        id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>IN<span class="pl-pds">'</span></span>, [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]],
+        content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>content<span class="pl-pds">'</span></span>,
+        _logic<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>OR<span class="pl-pds">'</span></span>
+    }
+}).<span class="pl-c1">select</span>();</pre></div>
+
+<h4>
+<a id="countfield" class="anchor" href="#countfield" aria-hidden="true"><span class="octicon octicon-link"></span></a>count(field)</h4>
+
+<p>查询符合条件的数目</p>
+
+<ul>
+<li>
+<code>field</code> String count的字段</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT COUNT(`id`) FROM `table` LIMIT 1</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).count(<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span> (<span class="pl-smi">count</span>) {
+    <span class="pl-c">//count为符合条件的数目     </span>
+})</pre></div>
+
+<h4>
+<a id="sumfield" class="anchor" href="#sumfield" aria-hidden="true"><span class="octicon octicon-link"></span></a>sum(field)</h4>
+
+<p>求和</p>
+
+<ul>
+<li>
+<code>field</code> String 要求和的字段</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT SUM(`num`) FROM `table` LIMIT 1</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).sum(<span class="pl-s"><span class="pl-pds">'</span>num<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span> (<span class="pl-smi">sum</span>) {
+    <span class="pl-c">//sum为求和的值    </span>
+});</pre></div>
+
+<h4>
+<a id="maxfield" class="anchor" href="#maxfield" aria-hidden="true"><span class="octicon octicon-link"></span></a>max(field)</h4>
+
+<p>求字段的最大值</p>
+
+<ul>
+<li>
+<code>field</code> String 要求最大值的字段</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT MAX(`num`) FROM `table` LIMIT 1</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">max</span>(<span class="pl-s"><span class="pl-pds">'</span>num<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span> (<span class="pl-smi">max</span>) {   <span class="pl-c">//max为num的最大值</span>
+});</pre></div>
+
+<h4>
+<a id="minfield" class="anchor" href="#minfield" aria-hidden="true"><span class="octicon octicon-link"></span></a>min(field)</h4>
+
+<p>求字段的最小值</p>
+
+<ul>
+<li>
+<code>field</code> String 要求最小值的字段</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT MIN(`num`) FROM `table` LIMIT 1</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">min</span>(<span class="pl-s"><span class="pl-pds">'</span>num<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span> (<span class="pl-smi">min</span>) {
+    <span class="pl-c">//min为num的最小值 </span>
+})</pre></div>
+
+<h4>
+<a id="avgfield" class="anchor" href="#avgfield" aria-hidden="true"><span class="octicon octicon-link"></span></a>avg(field)</h4>
+
+<p>求字段的平均值</p>
+
+<ul>
+<li>
+<code>field</code> Sting 要求平均值的字段</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//SELECT AVG(`num`) FROM `table` LIMIT 1;</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).avg(<span class="pl-s"><span class="pl-pds">'</span>num<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span> (<span class="pl-smi">avg</span>) {
+    <span class="pl-c">//avg为num的平均值 </span>
+})</pre></div>
+
+<h4>
+<a id="adddata" class="anchor" href="#adddata" aria-hidden="true"><span class="octicon octicon-link"></span></a>add(data)</h4>
+
+<p>插入数据</p>
+
+<ul>
+<li>
+<code>data</code> Object 要插入的数据</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> data  <span class="pl-k">=</span> {
+    title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>,
+    content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>content<span class="pl-pds">'</span></span>
+};
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).<span class="pl-c1">add</span>(data).then(<span class="pl-k">function</span> (<span class="pl-smi">insertId</span>) {
+    <span class="pl-c">//如果插入成功，返回插入的id</span>
+    }).catch(<span class="pl-k">function</span> (<span class="pl-smi">err</span>) {
+        <span class="pl-c">//插入失败，err为具体的错误信息</span>
+    })</pre></div>
+
+<h4>
+<a id="thenadddata-where-returndetail" class="anchor" href="#thenadddata-where-returndetail" aria-hidden="true"><span class="octicon octicon-link"></span></a>thenAdd(data, where, returnDetail)</h4>
+
+<p>当数据表中不存在where条件对应的数据时才进行插入</p>
+
+<ul>
+<li>
+<code>data</code> Object 要插入的数据</li>
+<li>
+<code>where</code> String|Array|Object 检测的条件</li>
+<li>
+<code>returnDetail</code> Boolean 是否返回详细的信息</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//假设字段title为UNIQUE</span>
+<span class="pl-k">var</span> data <span class="pl-k">=</span> {
+    title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>,
+    content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>content<span class="pl-pds">'</span></span>
+};
+<span class="pl-k">var</span> where <span class="pl-k">=</span> {
+    title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>
+}
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).thenAdd(data, where).then(<span class="pl-k">function</span> (<span class="pl-smi">id</span>) {
+    <span class="pl-c">//返回已经存在或者刚插入的id</span>
+})      
+<span class="pl-c">//返回详细信息</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).thenAdd(data, where, <span class="pl-c1">true</span>).then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-c">/*</span>
+<span class="pl-c">    data数据结构为</span>
+<span class="pl-c">    {</span>
+<span class="pl-c">        type: 'exist' || 'add',  //exist表示已存在，add新增</span>
+<span class="pl-c">        id: 1</span>
+<span class="pl-c">    }</span>
+<span class="pl-c">    */</span>  
+})</pre></div>
+
+<h4>
+<a id="addalldata" class="anchor" href="#addalldata" aria-hidden="true"><span class="octicon octicon-link"></span></a>addAll(data)</h4>
+
+<p>一次添加多条数据</p>
+
+<ul>
+<li>
+<code>data</code> Array</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> data <span class="pl-k">=</span> [{title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>xxx<span class="pl-pds">'</span></span>}, {title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>yyy<span class="pl-pds">'</span></span>}];
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).addAll(data).then(<span class="pl-k">function</span> (<span class="pl-smi">insertId</span>) {
+    <span class="pl-c">//插入成功</span>
+}).catch(<span class="pl-k">function</span> (<span class="pl-smi">err</span>) {
+    <span class="pl-c">//插入失败</span>
+})</pre></div>
+
+<h4>
+<a id="delete" class="anchor" href="#delete" aria-hidden="true"><span class="octicon octicon-link"></span></a>delete()</h4>
+
+<p>删除数据</p>
+
+<ul>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//删除所有数据</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).delete().then(<span class="pl-k">function</span> (<span class="pl-smi">affectRows</span>) {
+    <span class="pl-c">//返回影响行数</span>
+})      
+<span class="pl-c">//删除符合条件的数据</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where(where).delete().then(<span class="pl-en">functino</span> (<span class="pl-smi">affectRows</span>) {
+    <span class="pl-c">//返回影响的行数</span>
+})</pre></div>
+
+<h4>
+<a id="updatedata" class="anchor" href="#updatedata" aria-hidden="true"><span class="octicon octicon-link"></span></a>update(data)</h4>
+
+<p>更新数据，需要条件</p>
+
+<ul>
+<li>
+<code>data</code> Object 要更新的数据</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre>mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where(where).update(data).then(<span class="pl-k">function</span> (<span class="pl-smi">affectRows</span>) {
+    <span class="pl-c">//返回影响行数</span>
+})</pre></div>
+
+<h4>
+<a id="select" class="anchor" href="#select" aria-hidden="true"><span class="octicon octicon-link"></span></a>select()</h4>
+
+<p>查询符合条件的数据</p>
+
+<ul>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre>mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where(where).<span class="pl-c1">select</span>().then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-c">//返回结果 Array</span>
+})</pre></div>
+
+<h4>
+<a id="find" class="anchor" href="#find" aria-hidden="true"><span class="octicon octicon-link"></span></a>find()</h4>
+
+<p>查找一条符合条件的数据</p>
+
+<ul>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre>mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where(where).<span class="pl-c1">find</span>().then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-c">//返回结果 Object</span>
+})</pre></div>
+
+<h4>
+<a id="updateincfield-step" class="anchor" href="#updateincfield-step" aria-hidden="true"><span class="octicon octicon-link"></span></a>updateInc(field, step)</h4>
+
+<p>字段值增加</p>
+
+<ul>
+<li>
+<code>field</code> String 要增加的字段</li>
+<li>
+<code>step</code> Number 增加的数值，默认为1</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//将id为1的num字段加10</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> <span class="pl-c1">1</span>}).updateInc(<span class="pl-s"><span class="pl-pds">'</span>num<span class="pl-pds">'</span></span>, <span class="pl-c1">10</span>).then(<span class="pl-k">function</span> () {
+})</pre></div>
+
+<h4>
+<a id="updatedecfield-step" class="anchor" href="#updatedecfield-step" aria-hidden="true"><span class="octicon octicon-link"></span></a>updateDec(field, step)</h4>
+
+<p>字段值减少</p>
+
+<ul>
+<li>
+<code>field</code> String 要减少的字段</li>
+<li>
+<code>step</code> Number 减少的数字，默认为1</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//将id为1的num字段值减10</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> <span class="pl-c1">1</span>}).updateDec(<span class="pl-s"><span class="pl-pds">'</span>num<span class="pl-pds">'</span></span>, <span class="pl-c1">10</span>).then(<span class="pl-k">function</span> () {
+})</pre></div>
+
+<h4>
+<a id="getfieldfield-onlyone" class="anchor" href="#getfieldfield-onlyone" aria-hidden="true"><span class="octicon octicon-link"></span></a>getField(field, onlyOne)</h4>
+
+<p>获取某个字段的值</p>
+
+<ul>
+<li>
+<code>field</code> String 要获取的字段，可以是多个字段（用,隔开）</li>
+<li>
+<code>onlyOne</code> Boolean|Array 是否只需要一个值，或者是需要几个值</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//取id&gt;100的id集合</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1">100</span>]}).getField(<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-c">//data为Array，是符合结果的所有集合</span>
+    <span class="pl-c">//data = [101, 102, 103, 104]</span>
+})      
+<span class="pl-c">//只需要id&gt;100的一个值</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>&gt;<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">100</span>]}).getField(<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>, <span class="pl-c1">true</span>).then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-c">//data为数字，符合条件的第一个值</span>
+    <span class="pl-c">//data = 101</span>
+})
+<span class="pl-c">//只需要id&gt;100的3个值</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).where({id<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>&gt;<span class="pl-pds">'</span></span> <span class="pl-c1">100</span>]}).getField(<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>, <span class="pl-c1">3</span>).then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-c">//data为Array</span>
+    <span class="pl-c">//data = [101, 102, 103]</span>
+})
+<span class="pl-c">//需要id和title两个字段的值</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).getField(<span class="pl-s"><span class="pl-pds">'</span>id, title<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-c">//data为对象</span>
+    <span class="pl-c">/*</span>
+<span class="pl-c">    data = {</span>
+<span class="pl-c">        id: [101, 102, 103, 104],</span>
+<span class="pl-c">        title: ['aaaa', 'bbbb', 'cccc', 'dddd']</span>
+<span class="pl-c">    }</span>
+<span class="pl-c">    */</span>
+})</pre></div>
+
+<h4>
+<a id="countselectoptions-flag" class="anchor" href="#countselectoptions-flag" aria-hidden="true"><span class="octicon octicon-link"></span></a>countSelect(options, flag)</h4>
+
+<ul>
+<li>
+<code>options</code> 查询参数</li>
+<li>
+<code>flag</code> Boolean 当分页值不合法的时候，处理情况。true为修正到第一页，false为修正到最后一页，默认不进行修正</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//查询1-20条数据</span>
+mysql.table(<span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>).page(<span class="pl-c1">1</span>, <span class="pl-c1">20</span>).countSelect().then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+    <span class="pl-c">//data数据格式</span>
+    data <span class="pl-k">=</span> {
+        count<span class="pl-k">:</span> <span class="pl-c1">123</span>, <span class="pl-c">//总条数</span>
+        total<span class="pl-k">:</span> <span class="pl-c1">7</span>    <span class="pl-c">//总页数</span>
+        page<span class="pl-k">:</span> <span class="pl-c1">1</span>     <span class="pl-c">//当前页</span>
+        num<span class="pl-k">:</span> <span class="pl-c1">20</span>     <span class="pl-c">//每页显示数量</span>
+        data： [{}, {}] <span class="pl-c">//详细数据</span>
+    }
+});</pre></div>
+
+<h4>
+<a id="querysql-parse" class="anchor" href="#querysql-parse" aria-hidden="true"><span class="octicon octicon-link"></span></a>query(sql, parse)</h4>
+
+<p>自定义sql语句进行查询</p>
+
+<ul>
+<li>
+<code>sql</code> String 要执行的sql语句</li>
+<li>
+<code>parse</code> 格式参数的数据</li>
+<li>
+<code>return</code> promise</li>
+</ul>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> data <span class="pl-k">=</span> [
+    <span class="pl-s"><span class="pl-pds">'</span>*<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>table<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>id &gt; 100<span class="pl-pds">'</span></span>
+]   
+mysql.query(<span class="pl-s"><span class="pl-pds">'</span>SELECT %s FROM %s WHERE %s<span class="pl-pds">'</span></span>, data).then(<span class="pl-k">function</span> (<span class="pl-smi">data</span>) {
+})</pre></div>
+
+<h4>
+<a id="executesql-parse" class="anchor" href="#executesql-parse" aria-hidden="true"><span class="octicon octicon-link"></span></a>execute(sql, parse)</h4>
+
+<p>自定义sql语句执行，使用与query相同，返回数据不同，execute返回影响行数</p>
+
+<h4>
+<a id="close" class="anchor" href="#close" aria-hidden="true"><span class="octicon octicon-link"></span></a>close()</h4>
+
+<p>关闭连接池连接，非特殊情况，不建议使用</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/ffttpp/node-mysql-promise">Node-mysql-promise</a> is maintained by <a href="https://github.com/ffttpp">ffttpp</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
