@@ -31,6 +31,7 @@ mysql.table('table').select().then(function (data) {
 * `user`: 用户名
 * `password`: 密码
 * `database`: 数据库名
+* `tablePrefix`: 数据表前缀
 * `charset`: 编码（默认: UTF8_GENERAL_CI）
 * `timezone`: 时区（默认: 'local'）
 * `connectTimeout`: 连接超时时间（默认: 10000）
